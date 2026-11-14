@@ -16,18 +16,16 @@
 - **Documentation:** <https://zackwag.github.io/caddy-ui/>
 - **Docker Hub:** [backend](https://hub.docker.com/r/zackwag/caddy-ui-backend) · [frontend](https://hub.docker.com/r/zackwag/caddy-ui-frontend)
 
-## Build this fork
+## Container images
 
-The upstream Docker Hub images do not include these changes. Build and publish your own backend and frontend images:
+Pushes to `main` publish both images to GitHub Container Registry:
 
-```bash
-docker build -t YOURUSER/caddy-ui-backend:latest ./src/backend
-docker build -t YOURUSER/caddy-ui-frontend:latest ./src/frontend
-docker push YOURUSER/caddy-ui-backend:latest
-docker push YOURUSER/caddy-ui-frontend:latest
-```
+- `ghcr.io/ahmedpateldev/caddy-ui-backend:latest`
+- `ghcr.io/ahmedpateldev/caddy-ui-frontend:latest`
 
-Use the original project's Compose example, replacing both `image:` values. Keep the backend service named `caddy-ui-backend`.
+Use those references in your Compose file. If the packages are private, run `docker login ghcr.io` on the Compose host first.
+
+The Dockerfiles remain in `src/backend` and `src/frontend` if you need to build locally.
 
 ## License
 
