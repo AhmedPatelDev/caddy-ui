@@ -196,14 +196,17 @@ test('whole-page size validation counts UTF-8 bytes', () => {
     assert.throws(() => renderPage('backend', ['ä'.repeat(13000)], '1.0.0'), /maximum is 25000/);
 });
 
-test('the canonical README retains image routing and section order', async () => {
+test('the canonical README routes the fork notice to both images', async () => {
     const readme = await readFile(new URL('../../README.md', import.meta.url), 'utf8');
     const blocks = parseBlocks(readme);
     for (const image of ['backend', 'frontend']) {
         const { page } = renderPage(image, blocks[image], '2.19.0');
-        assert.equal((page.match(new RegExp(`> This is the \\*\\*${image}\\*\\* image\\.`, 'g')) || []).length, 1);
-        assert.ok(page.indexOf('## Features') < page.indexOf('## Quick Start'));
-        assert.ok(page.indexOf('## Quick Start') < page.indexOf('## Architecture'));
-        assert.ok(page.includes(image === 'backend' ? '## Environment Variables' : '## Custom Nginx Config'));
+        assert.match(page, /This is a modified fork/);
+        assert.ok(page.includes('https://github.com/zackwag/caddy-ui'));
+        assert.ok(page.includes('https://zackwag.github.io/caddy-ui/'));
+        assert.ok(page.includes('Purple accent theme'));
+        assert.ok(page.includes('CADDY_UI_AUTH_DISABLED=true'));
+        assert.ok(!page.includes('## Features'));
+        assert.ok(!page.includes('## Quick Start'));
     }
 });
